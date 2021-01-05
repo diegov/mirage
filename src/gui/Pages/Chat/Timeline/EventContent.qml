@@ -127,6 +127,11 @@ HRowLayout {
     HColumnLayout {
         id: contentColumn
 
+       transform: Scale {
+           yScale: model.event_type === "RoomMemberEvent" ? 0.8 : 1.0
+           xScale: model.event_type === "RoomMemberEvent" ? 0.8 : 1.0
+        } 
+
         Layout.fillWidth: true
         Layout.alignment: Qt.AlignVCenter
 
@@ -147,7 +152,9 @@ HRowLayout {
 
             color: model.event_type === "RoomMessageNotice" ?
                    theme.chat.message.noticeBody :
-                   theme.chat.message.body
+            (model.event_type === "RoomMemberEvent" ?
+             theme.chat.message.memberBody :
+             theme.chat.message.body)
 
             font.italic: model.event_type === "RoomMessageEmote"
             wrapMode: TextEdit.Wrap
@@ -261,6 +268,7 @@ HRowLayout {
             }
 
             Rectangle {
+                visible: model.event_type !== "RoomMemberEvent"
                 id: contentBackground
                 width: Math.max(
                     parent.paintedWidth +
